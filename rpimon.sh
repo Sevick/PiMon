@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./.env
+source /home/pi/.env
 
 HOST_NAME=$(hostname)
 
@@ -9,10 +9,10 @@ Clockspeed=$(vcgencmd measure_clock arm | awk -F"=" '{printf ("%0.0f",$2/1000000
 Corespeed=$(vcgencmd measure_clock core | awk -F"=" '{printf ("%0.0f",$2/1000000); }' )
 Health=$(vcgencmd get_throttled | awk -F"=" '{printf("0x%08x\n",$2)}')
 CoreVolt=$(vcgencmd measure_volts | cut -f2 -d=)
-ETH0RX=$(ifconfig eth0 | grep "RX packets" | awk -F ' ' '{print $5}')
-ETH0TX=$(ifconfig eth0 | grep "TX packets" | awk -F ' ' '{print $5}')
-WLAN0RX=$(ifconfig wlan0 | grep "RX packets" | awk -F ' ' '{print $5}')
-WLAN0TX=$(ifconfig wlan0 | grep "TX packets" | awk -F ' ' '{print $5}')
+ETH0RX=$(/sbin/ifconfig eth0 | grep "RX packets" | awk -F ' ' '{print $5}')
+ETH0TX=$(/sbin/ifconfig eth0 | grep "TX packets" | awk -F ' ' '{print $5}')
+WLAN0RX=$(/sbin/ifconfig wlan0 | grep "RX packets" | awk -F ' ' '{print $5}')
+WLAN0TX=$(/sbin/ifconfig wlan0 | grep "TX packets" | awk -F ' ' '{print $5}')
 Uptime=$(cat /proc/uptime | awk -F ' ' '{print $1}')
 LoadAverage=$(cat /proc/loadavg | awk -F ' ' '{print $1}')
 MemTotal=$(cat /proc/meminfo | grep MemTotal | awk -F ' ' '{print $2}')
@@ -48,7 +48,7 @@ JSON_STRING=$( jq -n \
 			--arg swapfree "$SwapFree" \
 			--arg diskread "$DiskReadSectors" \
 			--arg diskwrite "$DiskWriteSectors" \
-			--arg disktotal "$DiskTotal" \
+			--arg disktotal "$DiskTotal1K" \
 			--arg diskused "$DiskUsed" \
 			--arg diskavailable "$DiskAvailable" \
 			--arg cpuidle "$CpuIdle" \
